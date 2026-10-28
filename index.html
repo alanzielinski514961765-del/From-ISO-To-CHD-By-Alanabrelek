@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+        }
+        input[type="file"] {
+            background-color: #2c2c2c;
+            border: 1px dashed #444;
+            padding: 12px;
+            border-radius: 8px;
+            color: #fff;
+            width: 100%;
+            cursor: pointer;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:active {
+            background-color: #43a047;
+        }
+        #status {
+            font-size: 0.9rem;
+            text-align: center;
+            color: #ffa726;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Panel</h1>
+        
+        <div class="card">
+            <label for="fileInput">Wybierz plik:</label>
+            <input type="file" id="fileInput">
+            
+            <button id="actionBtn">Uruchom działanie</button>
+            <div id="status"></div>
+        </div>
+    </div>
+
+    <script>
+        const actionBtn = document.getElementById('actionBtn');
+        const fileInput = document.getElementById('fileInput');
+        const statusDiv = document.getElementById('status');
+
+        actionBtn.addEventListener('click', () => {
+            if (fileInput.files.length === 0) {
+                statusDiv.textContent = "Wybierz najpierw plik!";
+                return;
+            }
+            
+            const fileName = fileInput.files[0].name;
+            statusDiv.textContent = `Przetwarzanie pliku: ${fileName}...`;
+            
+            setTimeout(() => {
+                statusDiv.textContent = "Gotowe!";
+            }, 2000);
+        });
+    </script>
+
+</body>
+</html>
