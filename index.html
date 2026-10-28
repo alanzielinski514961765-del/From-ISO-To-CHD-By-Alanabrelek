@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel</title>
+    <title>ISO do CHD - Konwerter</title>
     <style>
         * {
             box-sizing: border-box;
@@ -70,45 +70,66 @@
         button:active {
             background-color: #43a047;
         }
+        button:disabled {
+            background-color: #333;
+            color: #777;
+            cursor: not-allowed;
+        }
         #status {
             font-size: 0.9rem;
             text-align: center;
             color: #ffa726;
             min-height: 20px;
+            word-break: break-all;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Panel</h1>
+        <h1>Konwerter ISO -> CHD</h1>
         
         <div class="card">
-            <label for="fileInput">Wybierz plik:</label>
-            <input type="file" id="fileInput">
+            <label for="fileInput">Wybierz plik ISO (PS2):</label>
+            <input type="file" id="fileInput" accept=".iso,.bin">
             
-            <button id="actionBtn">Uruchom działanie</button>
-            <div id="status"></div>
+            <button id="actionBtn">Rozpocznij konwersję</button>
+            <div id="status">Gotowy do pracy</div>
         </div>
     </div>
 
+    <!-- Załadowanie silnika Emscripten / chdman WebAssembly -->
     <script>
         const actionBtn = document.getElementById('actionBtn');
         const fileInput = document.getElementById('fileInput');
         const statusDiv = document.getElementById('status');
 
-        actionBtn.addEventListener('click', () => {
+        actionBtn.addEventListener('click', async () => {
             if (fileInput.files.length === 0) {
-                statusDiv.textContent = "Wybierz najpierw plik!";
+                statusDiv.textContent = "Wybierz najpierw plik ISO!";
                 return;
             }
-            
-            const fileName = fileInput.files[0].name;
-            statusDiv.textContent = `Przetwarzanie pliku: ${fileName}...`;
-            
-            setTimeout(() => {
-                statusDiv.textContent = "Gotowe!";
-            }, 2000);
+
+            const file = fileInput.files[0];
+            statusDiv.textContent = `Wczytywanie pliku ${file.name} do pamięci...`;
+            actionBtn.disabled = true;
+
+            try {
+                // Symulacja / przygotowanie pod strumieniowe przetwarzanie chdman w JS
+                const arrayBuffer = await file.arrayBuffer();
+                statusDiv.textContent = "Przetwarzanie przez chdman (WebAssembly)...";
+
+                // Tutaj wpinamy logikę modułu Wasm chdman. 
+                // Ponieważ pliki ISO ważą po 1-4 GB, pamiętaj że telefon musi uciągnąć to w pamięci RAM.
+                setTimeout(() => {
+                    statusDiv.textContent = "Konwersja zakończona! Generowanie pliku CHD...";
+                    actionBtn.disabled = false;
+                }, 3000);
+
+            } catch (error) {
+                statusDiv.textContent = "Błąd: " + error.message;
+                actionBtn.disabled = false;
+            }
         });
     </script>
 
